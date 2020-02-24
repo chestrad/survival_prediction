@@ -189,5 +189,5 @@ csv_logger = CSVLogger('./Dense log%s.csv' %str(k), append=True, separator=';')
 checkpointer = ModelCheckpoint(filepath='bestmodel at iter%s.h5' %str(k), verbose=1, save_best_only=True, monitor='val_loss', mode='auto')
 history=model.fit_generator(generator(images1,y_train, 40), steps_per_epoch = 240, epochs=50, verbose=1, validation_data=(images2, y_tune), callbacks=[early_stopping,csv_logger,checkpointer])
     
-#In the submitted work, “one minus the cumulative survival probability (cumulative product) to the third interval” was defined empirically as the prognostic factor (continous form).
+#In the submitted work, “one minus the cumulative survival probability (cumulative product) to the third interval” was defined empirically as the prognostic factor (continuous form).
 #Cumulative product can be calculated using np.cumprod function.
