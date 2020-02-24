@@ -1,6 +1,8 @@
 #A custom loss function is used which represents the negative log likelihood of the survival model.
-#The following codes were developed by Michael F. Gensheimer and Balasubramanian Narasimhan. https://github.com/MGensheimer/nnet-survival
+#The following codes were developed by Michael F. Gensheimer and Balasubramanian Narasimhan. 
+#Gensheimer MF, Narasimhan B. 2019. A scalable discrete-time survival model for neural networks. PeerJ 7:e6257 https://doi.org/10.7717/peerj.6257
 #Copyright belongs to the original authors.
+https://github.com/MGensheimer/nnet-survival
 
 from __future__ import print_function
 import numpy as np
