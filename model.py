@@ -179,7 +179,7 @@ def DenseNet(kernel1, kernel2, kernel3, numlayers, droprate, addD):
     model = Model(inputs = [model_input1], outputs = [out])  
     return model 
     
-#in our study, hyperparameters were set as follows: kernel1=32, kernel2=48, kernel3=32, droprate=0.2, numlayers=2, and addD=1
+#In our study, hyperparameters were set as follows: kernel1=32, kernel2=48, kernel3=32, droprate=0.2, numlayers=2, and addD=1
        
 model=DenseNet(kernel1, kernel2, kernel3, numlayers, droprate, addD)
 model=multi_gpu_model(model, gpus=4) # depends on the number of available GPUs
@@ -189,3 +189,5 @@ csv_logger = CSVLogger('./Dense log%s.csv' %str(k), append=True, separator=';')
 checkpointer = ModelCheckpoint(filepath='bestmodel at iter%s.h5' %str(k), verbose=1, save_best_only=True, monitor='val_loss', mode='auto')
 history=model.fit_generator(generator(images1,y_train, 40), steps_per_epoch = 240, epochs=50, verbose=1, validation_data=(images2, y_tune), callbacks=[early_stopping,csv_logger,checkpointer])
     
+#In the submitted work, “one minus the cumulative survival probability (cumulative product) to the third interval” was defined empirically as the prognostic factor (continous form).
+#Cumulative product can be calculated using np.cumprod function.
