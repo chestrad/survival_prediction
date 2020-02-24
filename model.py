@@ -1,6 +1,8 @@
-#Input image dimension was (samples, 50, 50, 50, 1), channel last array. Cropped images were read and resampled using SciPy (scipy.ndimage.interpolation.zoom), which were then normalized using the functions described below. 
-#All nodules and masses were annotated using three-dimensional boundary boxes (i.e., cubes) with a commercial software package (AVIEW, Coreline Soft, Seoul, Korea). 
-#Therefore, after resampling, all voxel sizes were isotropic.
+#All CT scans were first uploaded to a workstation for annotation using three-dimensional boundary boxes (i.e., cubic patch).
+#A commercial nodule labeller was used for annotation (AVIEW, Coreline Soft, Seoul, Korea).
+#Cropped three-dimensional images that contains nodules and masses were imported and resampled using SciPy (scipy.ndimage.interpolation.zoom), which were then normalized using the functions described below. 
+#After resampling, all voxel sizes were isotropic.
+#Input image dimension was (samples, 50, 50, 50, 1), channel last array.
 
 import gc
 import random
