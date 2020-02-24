@@ -1,3 +1,7 @@
+#Input image dimension was (samples, 50, 50, 50, 1), channel last array. Cropped images were read and resampled using SciPy (scipy.ndimage.interpolation.zoom), which were then normalized using the functions described below. 
+#All nodules and masses were annotated using three-dimensional boundary boxes (i.e., cubes) with a commercial software package (AVIEW, Coreline Soft, Seoul, Korea). 
+#Therefore, after resampling, all voxel sizes were isotropic.
+
 import gc
 import random
 from random import randint
@@ -36,7 +40,7 @@ from keras.models import load_model
 from imgaug import augmenters as iaa
 from keras.regularizers import l2
 
-#data augmentation 
+#Data augmentation 
 
 aug90 = iaa.Sometimes(1, iaa.Affine(rotate=(-90, -90),mode="constant",cval=(-1000,-1000)))
 aug180 = iaa.Sometimes(1, iaa.Affine(rotate=(-180, -180),mode="constant",cval=(-1000,-1000)))
@@ -76,7 +80,7 @@ def augmentHK(image):
     w4=np.array([w3])
     return w4
     
-#generator
+#Generator
 
 def generator(features, labels, batch_size):
     return_features = features.copy() 
@@ -92,13 +96,13 @@ def generator(features, labels, batch_size):
             batch_labels[i] = random_augmented_labels[0]
         yield batch_features, batch_labels
 
-#number of time intervals to make a discrete-time survival model 
+#Number of time intervals to make a discrete-time survival model 
 
 breaks=np.concatenate((np.arange(0,1200,300),np.arange(1200,3000,600))) 
 n_intervals=len(breaks)-1
 timegap = breaks[1:] - breaks[:-1]
 
-#pixel value normalization
+#Pixel value normalization
 
 MIN_BOUND = -1200.0
 MAX_BOUND = 300.0
@@ -118,7 +122,7 @@ def normalize1(image):
     image[image<0] = 0.
     return image 
 
-#model with DenseNet architecture
+#Model with DenseNet architecture
 
 def dense_factor(inputs, kernel1):
     h_1 = BatchNormalization()(inputs)
