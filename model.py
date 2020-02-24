@@ -92,7 +92,7 @@ def generator(features, labels, batch_size):
             batch_labels[i] = random_augmented_labels[0]
         yield batch_features, batch_labels
 
-#number of time intervals
+#number of time intervals to make a discrete-time survival model 
 
 breaks=np.concatenate((np.arange(0,1200,300),np.arange(1200,3000,600))) 
 n_intervals=len(breaks)-1
@@ -118,7 +118,7 @@ def normalize1(image):
     image[image<0] = 0.
     return image 
 
-#Model with DenseNet architecture
+#model with DenseNet architecture
 
 def dense_factor(inputs, kernel1):
     h_1 = BatchNormalization()(inputs)
@@ -176,7 +176,7 @@ def DenseNet(kernel1, kernel2, kernel3, numlayers, droprate, addD):
     model = Model(inputs = [model_input1], outputs = [out])  
     return model 
     
-# In our study, hyperparameters were set as follows: kernel1=32, kernel2=48, kernel3=32, droprate=0.2, numlayers=2, and addD=1
+#in our study, hyperparameters were set as follows: kernel1=32, kernel2=48, kernel3=32, droprate=0.2, numlayers=2, and addD=1
        
 model=DenseNet(kernel1, kernel2, kernel3, numlayers, droprate, addD)
 model=multi_gpu_model(model, gpus=4) # depends on the number of available GPUs
@@ -186,4 +186,3 @@ csv_logger = CSVLogger('./Dense log%s.csv' %str(k), append=True, separator=';')
 checkpointer = ModelCheckpoint(filepath='bestmodel at iter%s.h5' %str(k), verbose=1, save_best_only=True, monitor='val_loss', mode='auto')
 history=model.fit_generator(generator(images1,y_train, 40), steps_per_epoch = 240, epochs=50, verbose=1, validation_data=(images2, y_tune), callbacks=[early_stopping,csv_logger,checkpointer])
     
-
