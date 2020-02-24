@@ -37,6 +37,7 @@ from imgaug import augmenters as iaa
 from keras.regularizers import l2
 
 #data augmentation 
+
 aug90 = iaa.Sometimes(1, iaa.Affine(rotate=(-90, -90),mode="constant",cval=(-1000,-1000)))
 aug180 = iaa.Sometimes(1, iaa.Affine(rotate=(-180, -180),mode="constant",cval=(-1000,-1000)))
 aug270 = iaa.Sometimes(1, iaa.Affine(rotate=(-270, -270),mode="constant",cval=(-1000,-1000))) 
@@ -76,6 +77,7 @@ def augmentHK(image):
     return w4
     
 #generator
+
 def generator(features, labels, batch_size):
     return_features = features.copy() 
     return_labels = labels.copy()
@@ -91,11 +93,13 @@ def generator(features, labels, batch_size):
         yield batch_features, batch_labels
 
 #number of time intervals
+
 breaks=np.concatenate((np.arange(0,1200,300),np.arange(1200,3000,600))) 
 n_intervals=len(breaks)-1
 timegap = breaks[1:] - breaks[:-1]
 
 #pixel value normalization
+
 MIN_BOUND = -1200.0
 MAX_BOUND = 300.0
     
@@ -172,3 +176,14 @@ def DenseNet(kernel1, kernel2, kernel3, numlayers, droprate, addD):
     model = Model(inputs = [model_input1], outputs = [out])  
     return model 
     
+# In our study, hyperparameters were set as follows: kernel1=32, kernel2=48, kernel3=32, droprate=0.2, numlayers=2, and addD=1
+       
+model=DenseNet(kernel1, kernel2, kernel3, numlayers, droprate, addD)
+model=multi_gpu_model(model, gpus=4) # depends on the number of available GPUs
+model.compile(loss=surv_likelihood(n_intervals), optimizer=Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, schedule_decay=0.004))
+early_stopping = EarlyStopping(monitor='val_loss', patience=10) 
+csv_logger = CSVLogger('./Dense log%s.csv' %str(k), append=True, separator=';')
+checkpointer = ModelCheckpoint(filepath='bestmodel at iter%s.h5' %str(k), verbose=1, save_best_only=True, monitor='val_loss', mode='auto')
+history=model.fit_generator(generator(images1,y_train, 40), steps_per_epoch = 240, epochs=50, verbose=1, validation_data=(images2, y_tune), callbacks=[early_stopping,csv_logger,checkpointer])
+    
+
