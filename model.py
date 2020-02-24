@@ -174,9 +174,9 @@ def DenseNet(kernel1, kernel2, kernel3, numlayers, droprate, addD):
                            beta_regularizer=l2(weight_decay))(x)
     x = ReLU()(x)
     x = GlobalAveragePooling3D()(x) 
-    f2=Dense(n_intervals, kernel_initializer='zeros', bias_initializer='zeros')(x)
+    f1=Dense(n_intervals, kernel_initializer='zeros', bias_initializer='zeros')(x)
      
-    out=Activation('sigmoid')(f2)
+    out=Activation('sigmoid')(f1)
     model = Model(inputs = [model_input1], outputs = [out])  
     return model 
     
