@@ -29,15 +29,4 @@ def surv_likelihood(n_intervals):
     cens_uncens = 1. + y_true[:,0:n_intervals] * (y_pred-1.) #component for all individuals
     uncens = 1. - y_true[:,n_intervals:2*n_intervals] * y_pred #component for only uncensored individuals
     return K.sum(-K.log(K.clip(K.concatenate((cens_uncens,uncens)),K.epsilon(),None)),axis=-1) #return -log likelihood
-  return loss
-
-def surv_likelihood_rnn(n_intervals):
-  """Create custom Keras loss function for neural network survival model. Used for recurrent neural networks with time-distributed output.
-       This function is very similar to surv_likelihood but deals with the extra dimension of y_true and y_pred that exists because of the time-distributed output.
-  """
-  def loss(y_true, y_pred):
-    cens_uncens = 1. + y_true[0,:,0:n_intervals] * (y_pred-1.) #component for all patients
-    uncens = 1. - y_true[0,:,n_intervals:2*n_intervals] * y_pred #component for only uncensored patients
-    return K.sum(-K.log(K.clip(K.concatenate((cens_uncens,uncens)),K.epsilon(),None)),axis=-1) #return -log likelihood
-  return loss
-
+  return loss 
