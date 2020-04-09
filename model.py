@@ -18,7 +18,6 @@ from keras import optimizers, layers, regularizers
 from keras.layers import LeakyReLU, ReLU 
  
 from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras.models import load_model
 import math
 
 from lifelines import KaplanMeierFitter
